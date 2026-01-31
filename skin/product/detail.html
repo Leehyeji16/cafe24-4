@@ -1,0 +1,705 @@
+<!--@layout(/layout/basic/layout.html)-->
+
+<!-- Breadcrumb -->
+<div class="section path" module="product_headcategory">
+    <ol>
+        <li><a href="/">홈</a></li>
+        <li class="{$disp_cate_1|display}"><a href="{$link_product_list_1}">{$name_1}</a></li>
+        <li class="{$disp_cate_2|display}"><a href="{$link_product_list_2}">{$name_2}</a></li>
+        <li class="{$disp_cate_3|display}"><a href="{$link_product_list_3}">{$name_3}</a></li>
+        <li class="{$disp_cate_4|display}"><a href="{$link_product_list_4}">{$name_4}</a></li>
+    </ol>
+</div>
+
+<!-- Product Detail Section -->
+<div class="section" module="product_detail">
+    <!--@css(/css/module/product/detail.css)-->
+    <!--@js(/js/module/product/detail.js)-->
+
+    <div class="detailArea">
+        <!-- 이미지 영역 (왼쪽) -->
+        <div class="imgArea" module="product_image">
+            <!--@js(/js/module/product/product_image.js)-->
+
+            <!-- 메인 이미지 -->
+            <div class="prdImg">
+                <div class="thumbnail">
+                    <a href="/product/image_zoom2.html{$zoom_param}"
+                        onclick="window.open(this.href, 'image_zoom2', 'toolbar=no,scrollbars=auto,resizable=yes,width=450,height=693', this);return false;">
+                        <img src="{$big_img}" alt="{$seo_alt_tag}">
+                        <span module="product_Imagestyle">
+                            <span class="prdIcon {$icon_class_name}"
+                                style="background-image:url('{$icon_url}');"></span>
+                        </span>
+                    </a>
+                    <span class="wish">{$wish_icon}</span>
+                </div>
+            </div>
+
+            <!-- 썸네일 이미지 -->
+            <div class="listImg" module="product_addimage">
+                <ul class="list">
+                    <li>{$add_img}</li>
+                    <li>{$add_img}</li>
+                    <li>{$add_img}</li>
+                    <li>{$add_img}</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 정보 영역 (오른쪽) -->
+        <div class="infoArea">
+            <!-- 상품명 -->
+            <div class="headingArea">
+                <div class="icon">
+                    {$soldout_icon}
+                    {$stock_icon}
+                    {$recommend_icon}
+                    {$new_icon}
+                    {$product_icons}
+                </div>
+                <h1>{$name}</h1>
+                <span class="delivery {$delvtype_display|display}">(해외배송 가능상품)</span>
+            </div>
+
+            <!-- 기본 정보 테이블 -->
+            <div module="product_detaildesign">
+                <table>
+                    <caption>{$name} 기본 정보</caption>
+                    <tbody>
+                        <tr class="{$item_display|display}">
+                            <th scope="row">{$item_title}</th>
+                            <td>{$item_content}</td>
+                        </tr>
+                        <tr class="{$item_display|display}">
+                            <th scope="row">{$item_title}</th>
+                            <td>{$item_content}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 옵션 선택 -->
+            <div class="xans-element- xans-product xans-product-option xans-record-">
+                <table border="1" summary="">
+                    <caption>상품 옵션</caption>
+                    <tbody class="displaynone">
+                        <tr class="xans-record-">
+                            <th scope="row"><span>옵션</span></th>
+                            <td>
+                                <select id="product_option_id1" name="product_option_id1" class="displaynone">
+                                    <option value="">- [필수] 옵션을 선택해 주세요 -</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="totalProducts" class="totalProducts displaynone"></div>
+
+            <div class="product-options">
+                <!-- 수량 선택 -->
+                <div class="option-row">
+                    <label>수량</label>
+                    <div class="quantity-selector">
+                        <button type="button" class="qty-btn" onclick="decreaseQty()">−</button>
+                        <input type="number" id="quantity" name="quantity_opt[]" value="1" min="1" max="999" readonly>
+                        <button type="button" class="qty-btn" onclick="increaseQty()">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 안내 -->
+            <div class="guideArea">
+                <p class="info {$limit_display|display}">
+                    (최소주문수량 {$minimum_limit}개 이상
+                    <span class="{$maximum_limit_display|display}"> / 최대주문수량 {$maximum_limit}개 이하</span>)
+                </p>
+            </div>
+
+            <!-- 총 가격 -->
+            <div id="{$total.total_price_id}" class="totalPrice">
+                <div class="title">TOTAL (QUANTITY)</div>
+                <span class="{$total.total_cnt}">
+                    <strong><em>0</em>원</strong> (0개)
+                </span>
+            </div>
+
+            <!-- 구매 버튼 -->
+            <div module="product_action">
+                <div class="ec-base-button gColumn">
+                    <a href="#none" class="btnSubmit sizeL" id="buyNowBtn">BUY IT NOW</a>
+                    <a href="#none" class="btnNormal sizeL" id="addToCartBtn">ADD TO CART</a>
+                    <a href="#none" class="btnNormal sizeL" id="addToWishBtn">WISH LIST</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 장바구니 레이어 팝업 -->
+<div id="confirmLayer"
+    style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:9999; background:white; padding:20px; box-shadow:0 0 20px rgba(0,0,0,0.3); max-width:800px;">
+    <div module="Order_LayerBasketPackage">
+        <!--@css(/css/module/product/basketAdd2.css)-->
+        <h1>장바구니 담기</h1>
+        <div class="content" module="Order_LayerBasket">
+            <div class="totalCount">총 <strong>{$item_total}</strong> 개</div>
+            <ul class="prdList column4" module="Order_list">
+                <li class="item">
+                    <div class="box">
+                        <a href="/product/detail.html{$param}"><img src="{$img}"
+                                onerror="this.src='http://img.echosting.cafe24.com/thumb/img_product_small.gif';"
+                                alt="{$name_alt}" class="thumb" /></a>
+                        <p class="name"><a href="/product/detail.html{$param}">{$name}{$icon}</a></p>
+                        <p class="option">{$option_str}</p>
+                        <ul>
+                            <li class="price"> {$product_price}</li>
+                            <li class="{$product_price_display|display}"><strong>{$product_price_ref}</strong></li>
+                            <li>수량 : {$quantity}</li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+            <div class="btnArea center">
+                <a href="#none" onclick="Basket.orderLayerAll(this)"
+                    link-order="/order/orderform.html?basket_type=all_buy" link-login="/member/login.html"><img
+                        src="http://img.echosting.cafe24.com/skin/base_ko_KR/product/btn_buy_now.gif"
+                        alt="바로 구매하기" /></a>
+                <a href="/order/basket.html{$basket_param}"><img
+                        src="http://img.echosting.cafe24.com/skin/base_ko_KR/product/btn_go_basket2.gif"
+                        alt="장바구니 이동" /></a>
+                <a href="#none" onclick="$('#confirmLayer').hide();"><img
+                        src="http://img.echosting.cafe24.com/skin/base_ko_KR/product/btn_continue_shopping.gif"
+                        alt="쇼핑계속하기" /></a>
+            </div>
+        </div>
+        <div class="close"><a onclick="$('#confirmLayer').hide();"><img
+                    src="http://img.echosting.cafe24.com/skin/base_ko_KR/common/btn_close.png" alt="닫기" /></a></div>
+    </div>
+</div>
+
+<!-- CSS 로드만 -->
+<div class="section" module="product_additional">
+    <!--@css(/css/module/product/additional.css)-->
+</div>
+
+<!-- 탭 네비게이션 - 완전 독립 -->
+<div class="detail_tab">
+    <ul>
+        <li class="tab_open"><a href="#detail">상세정보</a></li>
+        <li><a href="#review">상품후기 <span>{$review_count}</span></a></li>
+        <li><a href="#qna">상품문의 <span>{$qna_count}</span></a></li>
+        <li><a href="#guide">배송/교환/환불</a></li>
+    </ul>
+</div>
+
+<!-- 상세 정보 -->
+<div id="prdDetail" class="productDetail">
+
+    <div class="product_content_section">
+        <div class="content_inner">
+            <div class="content_intro">
+                <h2 class="intro_title">자연스럽게 흐르는 실루엣</h2>
+                <p class="intro_subtitle"> 과하지 않은 디테일과 편안한 착용감으로<br>
+                    일상의 순간을 부드럽게 채워주는 디자인.<br>
+                    매일 입고 싶은 옷을 만듭니다.</p>
+            </div>
+
+            <div class="content_block">
+                <div class="content_text">
+                    <h2>편안함을 기준으로 디자인하다</h2>
+                    <p>최자연스러운 움직임을 고려한 패턴과<br>
+                        오래 입어도 부담 없는 실루엣으로<br>
+                        일상에 스며드는 스타일을 완성합니다.</p>
+                </div>
+                <div class="content_images">
+                    <div class="image_item">
+                        <img src="/images/main/0-1.jpg" alt="제품 이미지 1">
+                        <p class="image_caption">가볍고 부드러운 착용감</p>
+                    </div>
+                    <div class="image_item">
+                        <img src="/images/main/0-2.jpg" alt="제품 이미지 2">
+                        <p class="image_caption">자연스러운 핏과 디테일</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content_section_complex">
+                <h2 class="main_title">일상에 자연스럽게 어우러지는 의류</h2>
+
+                <div class="content_row">
+                    <div class="content_image_single">
+                        <img src="/images/main/1 (2).jpg" alt="제품 이미지">
+                    </div>
+                    <div class="content_text">
+                        <p> 여유로운 실루엣으로<br>
+                            체형에 구애받지 않고<br>
+                            편안하게 착용할 수 있습니다.</p>
+                    </div>
+                </div>
+
+                <div class="content_row">
+                    <div class="content_text">
+                        <p>
+                            부드러운 원단과 섬세한 디테일로<br>
+                            몸의 움직임에 자연스럽게 흐르며<br>
+                            일상 속 어떤 순간에도 어울리는<br>
+                            편안한 스타일을 완성합니다.
+                        </p>
+                    </div>
+                    <div class="content_image_single">
+                        <img src="/images/main/2.jpg" alt="제품 이미지 2">
+                    </div>
+                </div>
+
+                <h3 class="sub_title">디테일에서 느껴지는 완성도</h3>
+
+                <div class="content_row">
+                    <div class="content_image_single">
+                        <img src="/images/main/3.jpg" alt="제품 이미지 3">
+                    </div>
+                    <div class="content_text">
+                        <p> 작은 봉제 하나까지<br>
+                            꼼꼼하게 마감하여<br>
+                            오래도록 함께할 수 있는 옷입니다.</p>
+                    </div>
+                </div>
+
+                <div class="content_row">
+                    <div class="content_text">
+                        <p>유행에 치우치지 않는 디자인으로<br>
+                            매 시즌 꺼내 입기 좋은<br>
+                            타임리스 아이템입니다.</p>
+                    </div>
+                    <div class="content_image_single">
+                        <img src="/images/main/4.jpg" alt="제품 이미지 4">
+                    </div>
+                </div>
+
+                <div class="content_row">
+                    <div class="content_image_single">
+                        <img src="/images/main/5.jpg" alt="제품 이미지 5">
+                    </div>
+                    <div class="content_text">
+                        <p>자연에서 영감을 받은 컬러로<br>
+                            어떤 스타일에도 쉽게 어울립니다.</p>
+                    </div>
+                </div>
+
+                <div class="content_row">
+                    <div class="content_text">
+                        <p> 일상부터 여행까지<br>
+                            다양한 순간에 함께할 수 있는<br>
+                            활용도 높은 디자인입니다.</p>
+                    </div>
+                    <div class="content_image_single">
+                        <img src="/images/main/6.jpg" alt="제품 이미지 6">
+                    </div>
+                </div>
+            </div>
+
+            <div class="content_banner">
+                <img src="/images/main/banner.jpg" alt="배너 이미지">
+            </div>
+
+            <div class="content_products">
+                <h3>추천 상품</h3>
+                <div class="product_grid">
+                    <a href="/product/detail.html?product_no=22" class="product_card">
+                        <img src="/images/main/7-1.jpg" alt="">
+                        <p class="product_name">내추럴 원피스</p>
+                        <p class="product_price">150,000원</p>
+                    </a>
+                    <a href="/product/detail.html?product_no=23" class="product_card">
+                        <img src="/images/main/702.jpg" alt="">
+                        <p class="product_name">세미정장 원피스</p>
+                        <p class="product_price">98,000원</p>
+                    </a>
+                    <a href="/product/detail.html?product_no=20" class="product_card">
+                        <img src="/images/main/7-3.jpg" alt="">
+                        <p class="product_name">플로우 스커트</p>
+                        <p class="product_price">120,000원</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div module="product_relation" class="relation">
+        <div class="relation_title">
+            YOU MAY ALSO LIKE
+            <span>함께 구매하면 좋을 관련상품 모음</span>
+        </div>
+        <div module="product_relationlist" class="relation_slide">
+            <ul class="prdList">
+                <li>
+                    <div class="prdList__item">
+                        <div class="thumbnail">
+                            <a href="{$link_product_detail}">
+                                <img src="{$img_medium}" alt="{$seo_alt_tag}">
+                            </a>
+                        </div>
+                        <div class="description">
+                            <div class="name"><a href="{$link_product_detail}">{$name}</a></div>
+                            <div class="price">
+                                <span class="salePrice {$sale_price_display|display}">{$disp_sale_price}</span>
+                                <span class="prdPrice {$product_sale_strike}">{$disp_product_price}</span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- 상품 후기 -->
+<div id="prdReview">
+    <div class="board_title">
+        <h2>REVIEW</h2>
+        <div class="ec-base-button">
+            <a href="javascript:void(0);"
+                onclick="window.location.href='/board/product/write.html?board_no=4&product_no=' + new URLSearchParams(window.location.search).get('product_no');"
+                class="btnWrite">WRITE</a>
+        </div>
+    </div>
+    <div class="contents">
+        <div module="product_review">
+            <!--@js(/js/module/product/review.js)-->
+            <div class="ec-base-table typeList">
+                <table>
+                    <caption>상품사용후기</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">번호</th>
+                            <th scope="col">제목</th>
+                            <th scope="col">작성자</th>
+                            <th scope="col">작성일</th>
+                            <th scope="col">평점</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{$no}</td>
+                            <td class="subject left"><a href="{$link_board_detail}{$param_read}">{$subject}</a></td>
+                            <td>{$writer}</td>
+                            <td>{$write_date}</td>
+                            <td><img src="//img.echosting.cafe24.com/skin/skin/board/icon-star-rating{$point_count}.svg"
+                                    alt="{$point_count}점"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 상품 문의 -->
+<div id="prdQnA">
+    <div class="board_title">
+        <h2>Q&A</h2>
+        <div class="ec-base-button">
+            <a href="javascript:void(0);"
+                onclick="window.location.href='/board/product/write.html?board_no=6&product_no=' + new URLSearchParams(window.location.search).get('product_no');"
+                class="btnWrite">WRITE</a>
+        </div>
+    </div>
+    <div class="contents">
+        <div module="product_qna">
+            <!--@js(/js/module/product/qna.js)-->
+            <div class="ec-base-table typeList">
+                <table>
+                    <caption>상품 Q&A</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">번호</th>
+                            <th scope="col">제목</th>
+                            <th scope="col">작성자</th>
+                            <th scope="col">작성일</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{$no}</td>
+                            <td class="subject left"><a href="{$link_board_detail}{$param_read}">{$subject}</a></td>
+                            <td>{$writer}</td>
+                            <td>{$write_date}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 배송/교환/환불 안내 -->
+<div id="prdInfo">
+    <div class="detail_guide">
+        <div class="ec-base-fold">
+            <div class="title">
+                <h2>PAYMENT INFO</h2>
+            </div>
+            <div class="contents">
+                <div class="info">{$payment_info}</div>
+            </div>
+        </div>
+        <div class="ec-base-fold">
+            <div class="title">
+                <h2>DELIVERY INFO</h2>
+            </div>
+            <div class="contents">
+                <ul class="info delivery">
+                    <li>배송 방법 : {$shipping_method}</li>
+                    <li>배송 지역 : {$shipping_area}</li>
+                    <li>배송 비용 : {$shipping_fee}</li>
+                    <li>배송 기간 : {$shipping_period}</li>
+                </ul>
+            </div>
+        </div>
+        <div class="ec-base-fold">
+            <div class="title">
+                <h2>EXCHANGE INFO</h2>
+            </div>
+            <div class="contents">
+                <div class="info">{$exchange_info}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        'use strict';
+
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('=== 스크립트 로드 완료 ===');
+
+            // 가격 정보
+            const priceElement = document.querySelector('.infoArea table td');
+            let unitPrice = 150000;
+
+            if (priceElement) {
+                const priceText = priceElement.textContent.replace(/[^0-9]/g, '');
+                if (priceText) unitPrice = parseInt(priceText);
+            }
+
+            // ===== 수량 증가/감소 =====
+            window.decreaseQty = function () {
+                const input = document.getElementById('quantity');
+                let value = parseInt(input.value);
+                if (value > 1) {
+                    input.value = value - 1;
+                    updateTotalPrice();
+                    updateCafe24Quantity();
+                }
+            }
+
+            window.increaseQty = function () {
+                const input = document.getElementById('quantity');
+                let value = parseInt(input.value);
+                if (value < 999) {
+                    input.value = value + 1;
+                    updateTotalPrice();
+                    updateCafe24Quantity();
+                }
+            }
+
+            // ===== Cafe24 시스템에 수량 반영 =====
+            function updateCafe24Quantity() {
+                const qty = document.getElementById('quantity').value;
+                const qtyInputs = document.querySelectorAll('input[name="quantity_opt[]"]');
+                qtyInputs.forEach(function (input) {
+                    input.value = qty;
+                });
+            }
+
+            // ===== 총 가격 업데이트 =====
+            function updateTotalPrice() {
+                const quantity = parseInt(document.getElementById('quantity').value) || 1;
+                const total = unitPrice * quantity;
+                const totalContainer = document.querySelector('.totalPrice span');
+                if (totalContainer) {
+                    totalContainer.innerHTML = '<strong><em>' + total.toLocaleString() + '</em></strong>원 (' + quantity + '개)';
+                }
+            }
+
+            // ===== 장바구니 담기 (Cafe24 product_submit 활용) =====
+            document.getElementById('addToCartBtn').addEventListener('click', function (e) {
+                e.preventDefault();
+
+                // Cafe24 수량 동기화
+                updateCafe24Quantity();
+
+                if (typeof product_submit === 'function') {
+                    // product_submit(type, action, element)
+                    // type=2: 장바구니 담기
+                    // Cafe24 내부에서 폼 데이터를 수집하여 서버로 전송
+                    product_submit(2, '/exec/front/order/basket/', this);
+                } else if (typeof Cafe24Api !== 'undefined' && typeof Cafe24Api.addProductToBasket === 'function') {
+                    // Cafe24 API 방식 폴백
+                    var productNo = new URLSearchParams(window.location.search).get('product_no');
+                    var qty = document.getElementById('quantity').value || '1';
+                    Cafe24Api.addProductToBasket(productNo, qty, function () {
+                        window.location.href = '/order/basket.html';
+                    });
+                } else {
+                    // product_submit이 없는 경우: 상품 폼을 직접 찾아서 submit
+                    var form = document.querySelector('form[name="frmThis"]')
+                            || document.querySelector('form[action*="basket"]')
+                            || document.getElementById('productForm');
+
+                    if (form) {
+                        // 폼의 action을 장바구니 추가 URL로 설정
+                        form.action = '/exec/front/order/basket/';
+
+                        // command 필드가 있으면 'add'로, 없으면 생성
+                        var cmdInput = form.querySelector('input[name="command"]');
+                        if (!cmdInput) {
+                            cmdInput = document.createElement('input');
+                            cmdInput.type = 'hidden';
+                            cmdInput.name = 'command';
+                            form.appendChild(cmdInput);
+                        }
+                        cmdInput.value = 'add';
+
+                        // 폼 제출
+                        form.submit();
+                    } else {
+                        // 최종 폴백: 장바구니 페이지로 이동
+                        alert('장바구니에 상품을 담을 수 없습니다. 페이지를 새로고침 후 다시 시도해주세요.');
+                    }
+                }
+            });
+
+            // ===== 바로 구매 =====
+            document.getElementById('buyNowBtn').addEventListener('click', function (e) {
+                e.preventDefault();
+
+                // Cafe24 수량 동기화
+                updateCafe24Quantity();
+
+                if (typeof product_submit === 'function') {
+                    // type=1: 바로 구매
+                    product_submit(1, '/exec/front/order/basket/', this);
+                } else {
+                    var form = document.querySelector('form[name="frmThis"]')
+                            || document.querySelector('form[action*="basket"]')
+                            || document.getElementById('productForm');
+
+                    if (form) {
+                        form.action = '/exec/front/order/basket/';
+                        var cmdInput = form.querySelector('input[name="command"]');
+                        if (!cmdInput) {
+                            cmdInput = document.createElement('input');
+                            cmdInput.type = 'hidden';
+                            cmdInput.name = 'command';
+                            form.appendChild(cmdInput);
+                        }
+                        cmdInput.value = 'buy';
+                        form.submit();
+                    } else {
+                        alert('구매를 진행할 수 없습니다. 페이지를 새로고침 후 다시 시도해주세요.');
+                    }
+                }
+            });
+
+            // ===== 위시리스트 =====
+            document.getElementById('addToWishBtn').addEventListener('click', function (e) {
+                e.preventDefault();
+
+                if (typeof wish_submit === 'function') {
+                    wish_submit();
+                } else {
+                    var productNo = new URLSearchParams(window.location.search).get('product_no');
+                    if (productNo) {
+                        window.location.href = '/exec/front/Product/Wish/?product_no=' + productNo;
+                    } else {
+                        window.location.href = '/myshop/wish_list.html';
+                    }
+                }
+            });
+
+            updateTotalPrice();
+
+            // ===== 탭 전환 =====
+            var tabLinks = document.querySelectorAll('.detail_tab a');
+            var sections = {
+                detail: document.getElementById('prdDetail'),
+                review: document.getElementById('prdReview'),
+                qna: document.getElementById('prdQnA'),
+                guide: document.getElementById('prdInfo')
+            };
+
+            function updateActiveTab(targetId) {
+                var tabItems = document.querySelectorAll('.detail_tab li');
+                tabItems.forEach(function (item) {
+                    item.classList.remove('tab_open');
+                    var link = item.querySelector('a');
+                    if (link && link.getAttribute('href') === '#' + targetId) {
+                        item.classList.add('tab_open');
+                    }
+                });
+            }
+
+            function showSection(targetId) {
+                Object.keys(sections).forEach(function (key) {
+                    if (sections[key]) {
+                        sections[key].style.setProperty('display', 'none', 'important');
+                    }
+                });
+                if (sections[targetId]) {
+                    sections[targetId].style.setProperty('display', 'block', 'important');
+                }
+            }
+
+            tabLinks.forEach(function (link) {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var targetId = this.getAttribute('href').replace('#', '');
+                    updateActiveTab(targetId);
+                    showSection(targetId);
+                    var targetSection = sections[targetId];
+                    if (targetSection) {
+                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+
+            showSection('detail');
+            updateActiveTab('detail');
+
+            // ===== 스크롤 이벤트 =====
+            var lastScrollTop = 0;
+            window.addEventListener('scroll', function () {
+                var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                if (scrollTop > lastScrollTop) {
+                    document.body.classList.add('scroll-down');
+                    document.body.classList.remove('scroll-up');
+                } else {
+                    document.body.classList.add('scroll-up');
+                    document.body.classList.remove('scroll-down');
+                }
+                lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+            });
+
+            // ===== 페이드인 애니메이션 =====
+            var fadeElements = document.querySelectorAll('.content_block, .content_row, .content_banner, .content_products');
+            var fadeObserver = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+            fadeElements.forEach(function (element) {
+                fadeObserver.observe(element);
+            });
+
+            console.log('=== 모든 초기화 완료 ===');
+        });
+    })();
+</script>
