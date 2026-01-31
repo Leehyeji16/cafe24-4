@@ -128,9 +128,9 @@
             <!-- 구매 버튼 -->
             <div module="product_action">
                 <div class="ec-base-button gColumn">
-                    <a href="#none" class="btnSubmit sizeL" id="buyNowBtn">BUY IT NOW</a>
-                    <a href="#none" class="btnNormal sizeL" id="addToCartBtn">ADD TO CART</a>
-                    <a href="#none" class="btnNormal sizeL" id="addToWishBtn">WISH LIST</a>
+                    <a href="#none" class="btnSubmit sizeL" onclick="product_submit(1, '/exec/front/order/basket/', this)">BUY IT NOW</a>
+                    <a href="#none" class="btnNormal sizeL" onclick="product_submit(2, '/exec/front/order/basket/', this)">ADD TO CART</a>
+                    <a href="#none" class="btnNormal sizeL" onclick="wish_submit()">WISH LIST</a>
                 </div>
             </div>
         </div>
@@ -523,102 +523,6 @@
                     totalContainer.innerHTML = '<strong><em>' + total.toLocaleString() + '</em></strong>원 (' + quantity + '개)';
                 }
             }
-
-            // ===== 장바구니 담기 (Cafe24 product_submit 활용) =====
-            document.getElementById('addToCartBtn').addEventListener('click', function (e) {
-                e.preventDefault();
-
-                // Cafe24 수량 동기화
-                updateCafe24Quantity();
-
-                if (typeof product_submit === 'function') {
-                    // product_submit(type, action, element)
-                    // type=2: 장바구니 담기
-                    // Cafe24 내부에서 폼 데이터를 수집하여 서버로 전송
-                    product_submit(2, '/exec/front/order/basket/', this);
-                } else if (typeof Cafe24Api !== 'undefined' && typeof Cafe24Api.addProductToBasket === 'function') {
-                    // Cafe24 API 방식 폴백
-                    var productNo = new URLSearchParams(window.location.search).get('product_no');
-                    var qty = document.getElementById('quantity').value || '1';
-                    Cafe24Api.addProductToBasket(productNo, qty, function () {
-                        window.location.href = '/order/basket.html';
-                    });
-                } else {
-                    // product_submit이 없는 경우: 상품 폼을 직접 찾아서 submit
-                    var form = document.querySelector('form[name="frmThis"]')
-                            || document.querySelector('form[action*="basket"]')
-                            || document.getElementById('productForm');
-
-                    if (form) {
-                        // 폼의 action을 장바구니 추가 URL로 설정
-                        form.action = '/exec/front/order/basket/';
-
-                        // command 필드가 있으면 'add'로, 없으면 생성
-                        var cmdInput = form.querySelector('input[name="command"]');
-                        if (!cmdInput) {
-                            cmdInput = document.createElement('input');
-                            cmdInput.type = 'hidden';
-                            cmdInput.name = 'command';
-                            form.appendChild(cmdInput);
-                        }
-                        cmdInput.value = 'add';
-
-                        // 폼 제출
-                        form.submit();
-                    } else {
-                        // 최종 폴백: 장바구니 페이지로 이동
-                        alert('장바구니에 상품을 담을 수 없습니다. 페이지를 새로고침 후 다시 시도해주세요.');
-                    }
-                }
-            });
-
-            // ===== 바로 구매 =====
-            document.getElementById('buyNowBtn').addEventListener('click', function (e) {
-                e.preventDefault();
-
-                // Cafe24 수량 동기화
-                updateCafe24Quantity();
-
-                if (typeof product_submit === 'function') {
-                    // type=1: 바로 구매
-                    product_submit(1, '/exec/front/order/basket/', this);
-                } else {
-                    var form = document.querySelector('form[name="frmThis"]')
-                            || document.querySelector('form[action*="basket"]')
-                            || document.getElementById('productForm');
-
-                    if (form) {
-                        form.action = '/exec/front/order/basket/';
-                        var cmdInput = form.querySelector('input[name="command"]');
-                        if (!cmdInput) {
-                            cmdInput = document.createElement('input');
-                            cmdInput.type = 'hidden';
-                            cmdInput.name = 'command';
-                            form.appendChild(cmdInput);
-                        }
-                        cmdInput.value = 'buy';
-                        form.submit();
-                    } else {
-                        alert('구매를 진행할 수 없습니다. 페이지를 새로고침 후 다시 시도해주세요.');
-                    }
-                }
-            });
-
-            // ===== 위시리스트 =====
-            document.getElementById('addToWishBtn').addEventListener('click', function (e) {
-                e.preventDefault();
-
-                if (typeof wish_submit === 'function') {
-                    wish_submit();
-                } else {
-                    var productNo = new URLSearchParams(window.location.search).get('product_no');
-                    if (productNo) {
-                        window.location.href = '/exec/front/Product/Wish/?product_no=' + productNo;
-                    } else {
-                        window.location.href = '/myshop/wish_list.html';
-                    }
-                }
-            });
 
             updateTotalPrice();
 
