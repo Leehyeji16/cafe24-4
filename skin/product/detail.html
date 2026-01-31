@@ -128,9 +128,9 @@
             <!-- 구매 버튼 -->
             <div module="product_action">
                 <div class="ec-base-button gColumn">
-                    <a href="#none" class="btnSubmit sizeL" onclick="product_submit(1, '/exec/front/order/basket/', this)">BUY IT NOW</a>
-                    <a href="#none" class="btnNormal sizeL" onclick="product_submit(2, '/exec/front/order/basket/', this)">ADD TO CART</a>
-                    <a href="#none" class="btnNormal sizeL" onclick="wish_submit()">WISH LIST</a>
+                    <a href="#none" class="btnSubmit sizeL" onclick="handleBuy(this); return false;">BUY IT NOW</a>
+                    <a href="#none" class="btnNormal sizeL" onclick="handleCart(this); return false;">ADD TO CART</a>
+                    <a href="#none" class="btnNormal sizeL" onclick="handleWish(); return false;">WISH LIST</a>
                 </div>
             </div>
         </div>
@@ -469,141 +469,199 @@
 </div>
 
 <script>
-    (function () {
-        'use strict';
+    // ===== 구매/장바구니/위시리스트 핸들러 (글로벌) =====
+    // Cafe24 module="product_detail"이 자동 생성하는 form[name="frmThis"]를 활용
+    function handleCart(el) {
+        // 1순위: Cafe24 내장 함수
+        if (typeof product_submit === 'function') {
+            product_submit(2, '/exec/front/order/basket/', el);
+            return;
+        }
+        // 2순위: frmThis 폼 직접 submit
+        var form = document.frmThis || document.querySelector('form[name="frmThis"]');
+        if (form) {
+            form.action = '/exec/front/order/basket/';
+            form.submit();
+            return;
+        }
+        // 3순위: product_no로 직접 폼 생성하여 submit
+        var productNo = new URLSearchParams(window.location.search).get('product_no');
+        var qty = document.getElementById('quantity') ? document.getElementById('quantity').value : '1';
+        if (productNo) {
+            var f = document.createElement('form');
+            f.method = 'POST';
+            f.action = '/exec/front/order/basket/';
+            f.innerHTML =
+                '<input type="hidden" name="product_no" value="' + productNo + '">' +
+                '<input type="hidden" name="quantity[]" value="' + qty + '">' +
+                '<input type="hidden" name="command" value="add">' +
+                '<input type="hidden" name="basket_type" value="basket">';
+            document.body.appendChild(f);
+            f.submit();
+        }
+    }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            console.log('=== 스크립트 로드 완료 ===');
+    function handleBuy(el) {
+        if (typeof product_submit === 'function') {
+            product_submit(1, '/exec/front/order/basket/', el);
+            return;
+        }
+        var form = document.frmThis || document.querySelector('form[name="frmThis"]');
+        if (form) {
+            form.action = '/exec/front/order/basket/';
+            form.submit();
+            return;
+        }
+        var productNo = new URLSearchParams(window.location.search).get('product_no');
+        var qty = document.getElementById('quantity') ? document.getElementById('quantity').value : '1';
+        if (productNo) {
+            var f = document.createElement('form');
+            f.method = 'POST';
+            f.action = '/exec/front/order/basket/';
+            f.innerHTML =
+                '<input type="hidden" name="product_no" value="' + productNo + '">' +
+                '<input type="hidden" name="quantity[]" value="' + qty + '">' +
+                '<input type="hidden" name="command" value="buy">' +
+                '<input type="hidden" name="basket_type" value="buy">';
+            document.body.appendChild(f);
+            f.submit();
+        }
+    }
 
-            // 가격 정보
-            const priceElement = document.querySelector('.infoArea table td');
-            let unitPrice = 150000;
+    function handleWish() {
+        if (typeof wish_submit === 'function') {
+            wish_submit();
+            return;
+        }
+        var productNo = new URLSearchParams(window.location.search).get('product_no');
+        if (productNo) {
+            location.href = '/exec/front/Product/Wish/?product_no=' + productNo;
+        }
+    }
 
-            if (priceElement) {
-                const priceText = priceElement.textContent.replace(/[^0-9]/g, '');
-                if (priceText) unitPrice = parseInt(priceText);
-            }
+    // ===== 수량 증가/감소 (글로벌) =====
+    function decreaseQty() {
+        var input = document.getElementById('quantity');
+        var value = parseInt(input.value);
+        if (value > 1) {
+            input.value = value - 1;
+            syncQuantity();
+        }
+    }
 
-            // ===== 수량 증가/감소 =====
-            window.decreaseQty = function () {
-                const input = document.getElementById('quantity');
-                let value = parseInt(input.value);
-                if (value > 1) {
-                    input.value = value - 1;
-                    updateTotalPrice();
-                    updateCafe24Quantity();
+    function increaseQty() {
+        var input = document.getElementById('quantity');
+        var value = parseInt(input.value);
+        if (value < 999) {
+            input.value = value + 1;
+            syncQuantity();
+        }
+    }
+
+    function syncQuantity() {
+        var qty = document.getElementById('quantity').value;
+        // Cafe24 frmThis 폼 내부의 수량 input도 동기화
+        var qtyInputs = document.querySelectorAll('input[name="quantity_opt[]"], input[name="quantity[]"]');
+        for (var i = 0; i < qtyInputs.length; i++) {
+            qtyInputs[i].value = qty;
+        }
+        updateTotalPrice();
+    }
+
+    function updateTotalPrice() {
+        var priceElement = document.querySelector('.infoArea table td');
+        var unitPrice = 150000;
+        if (priceElement) {
+            var priceText = priceElement.textContent.replace(/[^0-9]/g, '');
+            if (priceText) unitPrice = parseInt(priceText);
+        }
+        var quantity = parseInt(document.getElementById('quantity').value) || 1;
+        var total = unitPrice * quantity;
+        var totalContainer = document.querySelector('.totalPrice span');
+        if (totalContainer) {
+            totalContainer.innerHTML = '<strong><em>' + total.toLocaleString() + '</em></strong>원 (' + quantity + '개)';
+        }
+    }
+
+    // ===== DOMContentLoaded =====
+    document.addEventListener('DOMContentLoaded', function () {
+        updateTotalPrice();
+
+        // ===== 탭 전환 =====
+        var tabLinks = document.querySelectorAll('.detail_tab a');
+        var sections = {
+            detail: document.getElementById('prdDetail'),
+            review: document.getElementById('prdReview'),
+            qna: document.getElementById('prdQnA'),
+            guide: document.getElementById('prdInfo')
+        };
+
+        function updateActiveTab(targetId) {
+            var tabItems = document.querySelectorAll('.detail_tab li');
+            tabItems.forEach(function (item) {
+                item.classList.remove('tab_open');
+                var link = item.querySelector('a');
+                if (link && link.getAttribute('href') === '#' + targetId) {
+                    item.classList.add('tab_open');
                 }
-            }
-
-            window.increaseQty = function () {
-                const input = document.getElementById('quantity');
-                let value = parseInt(input.value);
-                if (value < 999) {
-                    input.value = value + 1;
-                    updateTotalPrice();
-                    updateCafe24Quantity();
-                }
-            }
-
-            // ===== Cafe24 시스템에 수량 반영 =====
-            function updateCafe24Quantity() {
-                const qty = document.getElementById('quantity').value;
-                const qtyInputs = document.querySelectorAll('input[name="quantity_opt[]"]');
-                qtyInputs.forEach(function (input) {
-                    input.value = qty;
-                });
-            }
-
-            // ===== 총 가격 업데이트 =====
-            function updateTotalPrice() {
-                const quantity = parseInt(document.getElementById('quantity').value) || 1;
-                const total = unitPrice * quantity;
-                const totalContainer = document.querySelector('.totalPrice span');
-                if (totalContainer) {
-                    totalContainer.innerHTML = '<strong><em>' + total.toLocaleString() + '</em></strong>원 (' + quantity + '개)';
-                }
-            }
-
-            updateTotalPrice();
-
-            // ===== 탭 전환 =====
-            var tabLinks = document.querySelectorAll('.detail_tab a');
-            var sections = {
-                detail: document.getElementById('prdDetail'),
-                review: document.getElementById('prdReview'),
-                qna: document.getElementById('prdQnA'),
-                guide: document.getElementById('prdInfo')
-            };
-
-            function updateActiveTab(targetId) {
-                var tabItems = document.querySelectorAll('.detail_tab li');
-                tabItems.forEach(function (item) {
-                    item.classList.remove('tab_open');
-                    var link = item.querySelector('a');
-                    if (link && link.getAttribute('href') === '#' + targetId) {
-                        item.classList.add('tab_open');
-                    }
-                });
-            }
-
-            function showSection(targetId) {
-                Object.keys(sections).forEach(function (key) {
-                    if (sections[key]) {
-                        sections[key].style.setProperty('display', 'none', 'important');
-                    }
-                });
-                if (sections[targetId]) {
-                    sections[targetId].style.setProperty('display', 'block', 'important');
-                }
-            }
-
-            tabLinks.forEach(function (link) {
-                link.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    var targetId = this.getAttribute('href').replace('#', '');
-                    updateActiveTab(targetId);
-                    showSection(targetId);
-                    var targetSection = sections[targetId];
-                    if (targetSection) {
-                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                });
             });
+        }
 
-            showSection('detail');
-            updateActiveTab('detail');
-
-            // ===== 스크롤 이벤트 =====
-            var lastScrollTop = 0;
-            window.addEventListener('scroll', function () {
-                var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                if (scrollTop > lastScrollTop) {
-                    document.body.classList.add('scroll-down');
-                    document.body.classList.remove('scroll-up');
-                } else {
-                    document.body.classList.add('scroll-up');
-                    document.body.classList.remove('scroll-down');
+        function showSection(targetId) {
+            Object.keys(sections).forEach(function (key) {
+                if (sections[key]) {
+                    sections[key].style.setProperty('display', 'none', 'important');
                 }
-                lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
             });
+            if (sections[targetId]) {
+                sections[targetId].style.setProperty('display', 'block', 'important');
+            }
+        }
 
-            // ===== 페이드인 애니메이션 =====
-            var fadeElements = document.querySelectorAll('.content_block, .content_row, .content_banner, .content_products');
-            var fadeObserver = new IntersectionObserver(function (entries) {
-                entries.forEach(function (entry) {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('fade-in');
-                    }
-                });
-            }, {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
+        tabLinks.forEach(function (link) {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                var targetId = this.getAttribute('href').replace('#', '');
+                updateActiveTab(targetId);
+                showSection(targetId);
+                var targetSection = sections[targetId];
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
             });
-            fadeElements.forEach(function (element) {
-                fadeObserver.observe(element);
-            });
-
-            console.log('=== 모든 초기화 완료 ===');
         });
-    })();
+
+        showSection('detail');
+        updateActiveTab('detail');
+
+        // ===== 스크롤 이벤트 =====
+        var lastScrollTop = 0;
+        window.addEventListener('scroll', function () {
+            var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            if (scrollTop > lastScrollTop) {
+                document.body.classList.add('scroll-down');
+                document.body.classList.remove('scroll-up');
+            } else {
+                document.body.classList.add('scroll-up');
+                document.body.classList.remove('scroll-down');
+            }
+            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+        });
+
+        // ===== 페이드인 애니메이션 =====
+        var fadeElements = document.querySelectorAll('.content_block, .content_row, .content_banner, .content_products');
+        var fadeObserver = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+        fadeElements.forEach(function (element) {
+            fadeObserver.observe(element);
+        });
+    });
 </script>
