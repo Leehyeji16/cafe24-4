@@ -472,10 +472,14 @@
     // ===== 구매/장바구니/위시리스트 핸들러 (글로벌) =====
     // Cafe24 module="product_detail"이 자동 생성하는 form[name="frmThis"]를 활용
     function handleCart(el) {
-        // 1순위: Cafe24 내장 함수
+        // 1순위: Cafe24 내장 함수 (try-catch로 내부 에러 시 폴백)
         if (typeof product_submit === 'function') {
-            product_submit(2, '/exec/front/order/basket/', el);
-            return;
+            try {
+                product_submit(2, '/exec/front/order/basket/', el);
+                return;
+            } catch (e) {
+                console.log('product_submit 에러, 폴백 실행:', e.message);
+            }
         }
         // 2순위: frmThis 폼 직접 submit
         var form = document.frmThis || document.querySelector('form[name="frmThis"]');
@@ -503,8 +507,12 @@
 
     function handleBuy(el) {
         if (typeof product_submit === 'function') {
-            product_submit(1, '/exec/front/order/basket/', el);
-            return;
+            try {
+                product_submit(1, '/exec/front/order/basket/', el);
+                return;
+            } catch (e) {
+                console.log('product_submit 에러, 폴백 실행:', e.message);
+            }
         }
         var form = document.frmThis || document.querySelector('form[name="frmThis"]');
         if (form) {
@@ -530,8 +538,12 @@
 
     function handleWish() {
         if (typeof wish_submit === 'function') {
-            wish_submit();
-            return;
+            try {
+                wish_submit();
+                return;
+            } catch (e) {
+                console.log('wish_submit 에러, 폴백 실행:', e.message);
+            }
         }
         var productNo = new URLSearchParams(window.location.search).get('product_no');
         if (productNo) {
