@@ -1,5 +1,27 @@
 <!--@layout(/layout/basic/layout.html)-->
 
+<style>
+/* 모바일 pull-to-refresh 방지 */
+html, body {
+  overscroll-behavior-y: contain;
+}
+
+/* iOS Safari에서 스크롤 바운스 방지 */
+body {
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+}
+
+/* 추가 안전장치 */
+.hero_section,
+.product_section,
+.story_section,
+.feature_section,
+.newsletter_section {
+  touch-action: pan-y pinch-zoom;
+}
+</style>
+
 <!-- 히어로 섹션 -->
 <section class="hero_section">
   <div class="hero_image">
@@ -327,8 +349,6 @@
     // 초기화 플래그 - 중복 실행 방지
     let isSliderInitialized = false;
     let isAnimationInitialized = false;
-    let lastWindowWidth = window.innerWidth;
-    let resizeTimer = null;
 
     // 탭 기능
     const productTabs = document.querySelectorAll('.product-tab');
@@ -345,16 +365,12 @@
     });
 
     function initMobileSlider() {
-      // 이미 초기화되었으면 스킵
       if (isSliderInitialized) return;
 
       if (window.innerWidth <= 768) {
         document.querySelectorAll('.tab-content').forEach(tab => {
           const prdList = tab.querySelector('.prdList');
-          if (!prdList) return;
-
-          // 이미 핸들러가 있으면 스킵
-          if (tab._sliderInitialized) return;
+          if (!prdList || tab._sliderInitialized) return;
 
           const handler = function(e) {
             const rect = tab.getBoundingClientRect();
@@ -362,17 +378,11 @@
             const scrollAmount = prdList.offsetWidth;
 
             if (clickX < 60) {
-              prdList.scrollBy({
-                left: -scrollAmount,
-                behavior: 'smooth'
-              });
+              prdList.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
               e.stopPropagation();
               e.preventDefault();
             } else if (clickX > rect.width - 60) {
-              prdList.scrollBy({
-                left: scrollAmount,
-                behavior: 'smooth'
-              });
+              prdList.scrollBy({ left: scrollAmount, behavior: 'smooth' });
               e.stopPropagation();
               e.preventDefault();
             }
@@ -386,7 +396,7 @@
       }
     }
 
-    // Feature 카드 스크롤 애니메이션 (데스크톱용)
+    // Feature 카드 스크롤 애니메이션
     function initFeatureAnimation() {
       if (isAnimationInitialized) return;
 
@@ -405,9 +415,7 @@
         rootMargin: '0px 0px -50px 0px'
       });
 
-      featureCards.forEach(card => {
-        observer.observe(card);
-      });
+      featureCards.forEach(card => observer.observe(card));
     }
 
     // Story 섹션 스크롤 애니메이션
@@ -432,7 +440,6 @@
 
       observer.observe(storyContent);
       storyContent._observerAttached = true;
-
       isAnimationInitialized = true;
     }
 
@@ -443,17 +450,24 @@
     const hideTodayCheckbox = document.getElementById('hideToday');
 
     function showPopup() {
+      // sessionStorage로 현재 세션에서 이미 표시했는지 체크
+      const shownThisSession = sessionStorage.getItem('popupShown');
+      if (shownThisSession) return;
+
+      // localStorage로 오늘 하루 숨기기 체크
       const hideUntil = localStorage.getItem('hidePopupUntil');
       const now = new Date().getTime();
 
-      if (!hideUntil || now > parseInt(hideUntil)) {
-        setTimeout(() => {
-          if (popupOverlay) {
-            popupOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-          }
-        }, 1000);
-      }
+      if (hideUntil && now < parseInt(hideUntil)) return;
+
+      // 팝업 표시
+      setTimeout(() => {
+        if (popupOverlay) {
+          popupOverlay.classList.add('active');
+          document.body.style.overflow = 'hidden';
+          sessionStorage.setItem('popupShown', 'true');
+        }
+      }, 1000);
     }
 
     function closePopup() {
@@ -497,30 +511,6 @@
     initStoryAnimation();
     showPopup();
 
-    // 리사이즈 시 - 실제 너비 변경시에만 재초기화 (debounce 적용)
-    window.addEventListener('resize', function() {
-      // debounce 처리
-      if (resizeTimer) {
-        clearTimeout(resizeTimer);
-      }
-
-      resizeTimer = setTimeout(function() {
-        const currentWidth = window.innerWidth;
-
-        // 실제 너비가 변경된 경우에만 처리 (모바일 스크롤로 인한 높이 변화 무시)
-        if (Math.abs(currentWidth - lastWindowWidth) > 50) {
-          lastWindowWidth = currentWidth;
-
-          // 모바일에서 데스크톱으로 전환 시 슬라이더 플래그 리셋
-          if (currentWidth > 768) {
-            isSliderInitialized = false;
-          } else {
-            // 데스크톱에서 모바일로 전환 시 슬라이더 초기화
-            isSliderInitialized = false;
-            initMobileSlider();
-          }
-        }
-      }, 250);
-    });
+    // resize 이벤트 완전 제거 - 모바일에서 문제 유발
   })();
 </script>
