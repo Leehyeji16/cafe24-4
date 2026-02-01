@@ -2,23 +2,47 @@
 
 <style>
 /* 모바일 pull-to-refresh 방지 */
-html, body {
-  overscroll-behavior-y: contain;
+html {
+  overscroll-behavior: none;
 }
 
-/* iOS Safari에서 스크롤 바운스 방지 */
-body {
+/* 모바일 스크롤 최적화 */
+.prdList {
   -webkit-overflow-scrolling: touch;
-  position: relative;
+  scroll-snap-type: x mandatory;
 }
 
-/* 추가 안전장치 */
-.hero_section,
-.product_section,
-.story_section,
-.feature_section,
-.newsletter_section {
-  touch-action: pan-y pinch-zoom;
+.prdList__item {
+  scroll-snap-align: start;
+}
+
+/* Feature, Story 애니메이션 - CSS만 사용 */
+.feature_card,
+.story_content,
+.story_image {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .feature_card {
+    animation: fadeInUp 0.6s ease-out both;
+  }
+  .feature_card:nth-child(1) { animation-delay: 0.1s; }
+  .feature_card:nth-child(2) { animation-delay: 0.2s; }
+  .feature_card:nth-child(3) { animation-delay: 0.3s; }
+  .feature_card:nth-child(4) { animation-delay: 0.4s; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>
 
@@ -346,171 +370,69 @@ body {
   (function() {
     'use strict';
 
-    // 초기화 플래그 - 중복 실행 방지
-    let isSliderInitialized = false;
-    let isAnimationInitialized = false;
-
-    // 탭 기능
-    const productTabs = document.querySelectorAll('.product-tab');
-    productTabs.forEach(tab => {
-      tab.addEventListener('click', function () {
-        productTabs.forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.product_section .tab-content').forEach(c => {
-          c.classList.remove('active');
-        });
+    // 탭 기능만 유지 (단순화)
+    var productTabs = document.querySelectorAll('.product-tab');
+    for (var i = 0; i < productTabs.length; i++) {
+      productTabs[i].addEventListener('click', function() {
+        for (var j = 0; j < productTabs.length; j++) {
+          productTabs[j].classList.remove('active');
+        }
+        var contents = document.querySelectorAll('.product_section .tab-content');
+        for (var k = 0; k < contents.length; k++) {
+          contents[k].classList.remove('active');
+        }
         this.classList.add('active');
-        const targetTab = this.getAttribute('data-tab');
+        var targetTab = this.getAttribute('data-tab');
         document.getElementById(targetTab).classList.add('active');
       });
-    });
-
-    function initMobileSlider() {
-      if (isSliderInitialized) return;
-
-      if (window.innerWidth <= 768) {
-        document.querySelectorAll('.tab-content').forEach(tab => {
-          const prdList = tab.querySelector('.prdList');
-          if (!prdList || tab._sliderInitialized) return;
-
-          const handler = function(e) {
-            const rect = tab.getBoundingClientRect();
-            const clickX = e.clientX - rect.left;
-            const scrollAmount = prdList.offsetWidth;
-
-            if (clickX < 60) {
-              prdList.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-              e.stopPropagation();
-              e.preventDefault();
-            } else if (clickX > rect.width - 60) {
-              prdList.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-              e.stopPropagation();
-              e.preventDefault();
-            }
-          };
-
-          tab.addEventListener('click', handler);
-          tab._sliderInitialized = true;
-        });
-
-        isSliderInitialized = true;
-      }
     }
 
-    // Feature 카드 스크롤 애니메이션
-    function initFeatureAnimation() {
-      if (isAnimationInitialized) return;
-
-      const featureCards = document.querySelectorAll('.feature_card');
-      if (!featureCards.length) return;
-
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('animate');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, {
-        threshold: 0.2,
-        rootMargin: '0px 0px -50px 0px'
-      });
-
-      featureCards.forEach(card => observer.observe(card));
-    }
-
-    // Story 섹션 스크롤 애니메이션
-    function initStoryAnimation() {
-      const storyContent = document.querySelector('.story_content');
-      const storyImage = document.querySelector('.story_image');
-
-      if (!storyContent || storyContent._observerAttached) return;
-
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            storyContent.classList.add('animate');
-            if (storyImage) storyImage.classList.add('animate');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, {
-        threshold: 0.2,
-        rootMargin: '0px 0px -50px 0px'
-      });
-
-      observer.observe(storyContent);
-      storyContent._observerAttached = true;
-      isAnimationInitialized = true;
-    }
-
-    // 뉴스레터 팝업
-    const popupOverlay = document.querySelector('.newsletter-popup-overlay');
-    const popupClose = document.querySelector('.popup-close');
-    const popupCloseText = document.querySelector('.popup-close-text');
-    const hideTodayCheckbox = document.getElementById('hideToday');
+    // 뉴스레터 팝업 (단순화)
+    var popupOverlay = document.querySelector('.newsletter-popup-overlay');
+    var popupClose = document.querySelector('.popup-close');
+    var popupCloseText = document.querySelector('.popup-close-text');
+    var hideTodayCheckbox = document.getElementById('hideToday');
+    var popupShown = false;
 
     function showPopup() {
-      // sessionStorage로 현재 세션에서 이미 표시했는지 체크
-      const shownThisSession = sessionStorage.getItem('popupShown');
-      if (shownThisSession) return;
+      if (popupShown) return;
 
-      // localStorage로 오늘 하루 숨기기 체크
-      const hideUntil = localStorage.getItem('hidePopupUntil');
-      const now = new Date().getTime();
+      // 오늘 하루 숨기기 체크
+      var hideUntil = localStorage.getItem('hidePopupUntil');
+      if (hideUntil && new Date().getTime() < parseInt(hideUntil)) return;
 
-      if (hideUntil && now < parseInt(hideUntil)) return;
-
-      // 팝업 표시
-      setTimeout(() => {
+      popupShown = true;
+      setTimeout(function() {
         if (popupOverlay) {
           popupOverlay.classList.add('active');
           document.body.style.overflow = 'hidden';
-          sessionStorage.setItem('popupShown', 'true');
         }
-      }, 1000);
+      }, 1500);
     }
 
     function closePopup() {
       if (hideTodayCheckbox && hideTodayCheckbox.checked) {
-        const tomorrow = new Date();
+        var tomorrow = new Date();
         tomorrow.setHours(24, 0, 0, 0);
         localStorage.setItem('hidePopupUntil', tomorrow.getTime().toString());
       }
-
       if (popupOverlay) {
         popupOverlay.classList.remove('active');
         document.body.style.overflow = '';
       }
     }
 
-    if (popupClose) {
-      popupClose.addEventListener('click', closePopup);
-    }
-
-    if (popupCloseText) {
-      popupCloseText.addEventListener('click', closePopup);
-    }
-
+    if (popupClose) popupClose.onclick = closePopup;
+    if (popupCloseText) popupCloseText.onclick = closePopup;
     if (popupOverlay) {
-      popupOverlay.addEventListener('click', function (e) {
-        if (e.target === popupOverlay) {
-          closePopup();
-        }
-      });
+      popupOverlay.onclick = function(e) {
+        if (e.target === popupOverlay) closePopup();
+      };
     }
 
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && popupOverlay && popupOverlay.classList.contains('active')) {
-        closePopup();
-      }
-    });
-
-    // 초기 실행
-    initMobileSlider();
-    initFeatureAnimation();
-    initStoryAnimation();
+    // 팝업 표시
     showPopup();
 
-    // resize 이벤트 완전 제거 - 모바일에서 문제 유발
+    // 애니메이션은 CSS로만 처리 (JS IntersectionObserver 제거)
   })();
 </script>
