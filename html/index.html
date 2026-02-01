@@ -1,0 +1,526 @@
+<!--@layout(/layout/basic/layout.html)-->
+
+<!-- 히어로 섹션 -->
+<section class="hero_section">
+  <div class="hero_image">
+    <img src="/images/hero.jpg" alt="Natural Living">
+  </div>
+  <div class="hero_content">
+    <h1 class="hero_title">Set for Summer</h1>
+    <p class="hero_subtitle">
+      New clean beauty is coming in hot—plus,<br>
+      bestsellers to keep you fresh all summer.<br>
+      ayurvedic science, discover potent indian botanical natural skincare,<br>
+      to transform your rituals.
+    </p>
+    <a href="/product/list.html" class="hero_link">Shop now</a>
+  </div>
+</section>
+
+<!-- 신상품 섹션 -->
+<section class="product_section">
+  <div class="section_inner">
+    <div class="section_header">
+      <h2 class="section_title">All Collection</h2>
+      <p class="section_subtitle">지금 이 계절에 가장 사랑받는 모든 아이템을 한눈에 만나보세요.</p>
+    </div>
+
+    <!-- 탭 버튼 추가 -->
+    <div class="product-tabs">
+      <button class="product-tab active" data-tab="newtab1">
+        ALL
+        <span class="tab-indicator"></span>
+      </button>
+      <button class="product-tab" data-tab="newtab2">
+        SIGNATURE
+        <span class="tab-indicator"></span>
+      </button>
+      <button class="product-tab" data-tab="newtab3">
+        NEW IN
+        <span class="tab-indicator"></span>
+      </button>
+    </div>
+
+    <!-- 탭 1: ALL -->
+    <div id="newtab1" class="tab-content active">
+      <div module="product_listmain_1">
+        <!--@css(/css/module/product/listmain.css)-->
+        <!--
+          $count = 8
+          $basket_result = /product/add_basket.html
+          $basket_option = /product/basket_option.html
+        -->
+        <ul class="prdList column4 stagger-animation">
+          <li class="prdList__item" id="anchorBoxId_{$product_no}">
+            <div class="box">
+              <a href="/product/detail.html{$param}" name="anchorBoxName_{$product_no}" class="thumbnail"><img
+                  src="{$image_medium}" id="{$image_medium_id}" alt="" class="thumb" /></a>
+              <div class="status">
+                <div class="icon">{$soldout_icon} {$recommend_icon} {$new_icon} {$product_icons} {$benefit_icons}</div>
+              </div>
+              <div class="description">
+                <p class="name">
+                  <strong><a href="/product/detail.html{$param}" class="{$product_name_display|display}"><span
+                        class="title {$product_name_title_display|display}">{$product_name_title} :</span>
+                      {$product_name}</a></strong>
+                </p>
+                <p class="price">
+                  <strong>{$product_price}</strong>
+                </p>
+              </div>
+              <button type="button" class="btn_add_cart" onclick="addToCart({$product_no})">
+                See Details
+              </button>
+            </div>
+          </li>
+          <li class="prdList__item" id="anchorBoxId_{$product_no}">
+            <div class="box">
+              <a href="/product/detail.html{$param}" name="anchorBoxName_{$product_no}" class="thumbnail"><img
+                  src="{$image_medium}" id="{$image_medium_id}" alt="" class="thumb" /></a>
+              <div class="status">
+                <div class="icon">{$soldout_icon} {$recommend_icon} {$new_icon} {$product_icons} {$benefit_icons}</div>
+              </div>
+              <div class="description">
+                <p class="name">
+                  <strong><a href="/product/detail.html{$param}" class="{$product_name_display|display}"><span
+                        class="title {$product_name_title_display|display}">{$product_name_title} :</span>
+                      {$product_name}</a></strong>
+                </p>
+                <p class="price">
+                  <strong>{$product_price}</strong>
+                </p>
+              </div>
+              <button type="button" class="btn_add_cart" onclick="addToCart({$product_no})">
+                See Details
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 탭 2: SIGNATURE -->
+    <div id="newtab2" class="tab-content">
+      <div module="product_listmain_2">
+        <!--
+          $count = 8
+          $basket_result = /product/add_basket.html
+          $basket_option = /product/basket_option.html
+        -->
+        <ul class="prdList column4">
+          <li class="prdList__item" id="anchorBoxId_{$product_no}">
+            <div class="box">
+              <a href="/product/detail.html{$param}" name="anchorBoxName_{$product_no}" class="thumbnail">
+                <img src="{$image_medium}" id="{$image_medium_id}" alt="" class="thumb" />
+              </a>
+              <div class="status">
+                <div class="icon">{$soldout_icon} {$recommend_icon} {$new_icon} {$product_icons} {$benefit_icons}</div>
+              </div>
+              <div class="description">
+                <p class="name">
+                  <strong><a href="/product/detail.html{$param}">{$product_name}</a></strong>
+                </p>
+                <p class="price">
+                  <strong>{$product_price}</strong>
+                </p>
+              </div>
+              <button type="button" class="btn_add_cart" onclick="addToCart({$product_no})">
+                See Details
+              </button>
+            </div>
+          </li>
+          <li class="prdList__item" id="anchorBoxId_{$product_no}">
+            <div class="box">
+              <a href="/product/detail.html{$param}" name="anchorBoxName_{$product_no}" class="thumbnail">
+                <img src="{$image_medium}" id="{$image_medium_id}" alt="" class="thumb" />
+              </a>
+              <div class="status">
+                <div class="icon">{$soldout_icon} {$recommend_icon} {$new_icon} {$product_icons} {$benefit_icons}</div>
+              </div>
+              <div class="description">
+                <p class="name">
+                  <strong><a href="/product/detail.html{$param}">{$product_name}</a></strong>
+                </p>
+                <p class="price">
+                  <strong>{$product_price}</strong>
+                </p>
+              </div>
+              <button type="button" class="btn_add_cart" onclick="addToCart({$product_no})">
+                See Details
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 탭 3: NEW IN -->
+    <div id="newtab3" class="tab-content">
+      <div module="product_listmain_3">
+        <!--
+          $count = 8
+          $basket_result = /product/add_basket.html
+          $basket_option = /product/basket_option.html
+        -->
+        <ul class="prdList column4">
+          <li class="prdList__item" id="anchorBoxId_{$product_no}">
+            <div class="box">
+              <a href="/product/detail.html{$param}" name="anchorBoxName_{$product_no}" class="thumbnail">
+                <img src="{$image_medium}" id="{$image_medium_id}" alt="" class="thumb" />
+              </a>
+              <div class="status">
+                <div class="icon">{$soldout_icon} {$recommend_icon} {$new_icon} {$product_icons} {$benefit_icons}</div>
+              </div>
+              <div class="description">
+                <p class="name">
+                  <strong><a href="/product/detail.html{$param}">{$product_name}</a></strong>
+                </p>
+                <p class="price">
+                  <strong>{$product_price}</strong>
+                </p>
+              </div>
+              <button type="button" class="btn_add_cart" onclick="addToCart({$product_no})">
+                See Details
+              </button>
+            </div>
+          </li>
+          <li class="prdList__item" id="anchorBoxId_{$product_no}">
+            <div class="box">
+              <a href="/product/detail.html{$param}" name="anchorBoxName_{$product_no}" class="thumbnail">
+                <img src="{$image_medium}" id="{$image_medium_id}" alt="" class="thumb" />
+              </a>
+              <div class="status">
+                <div class="icon">{$soldout_icon} {$recommend_icon} {$new_icon} {$product_icons} {$benefit_icons}</div>
+              </div>
+              <div class="description">
+                <p class="name">
+                  <strong><a href="/product/detail.html{$param}">{$product_name}</a></strong>
+                </p>
+                <p class="price">
+                  <strong>{$product_price}</strong>
+                </p>
+              </div>
+              <button type="button" class="btn_add_cart" onclick="addToCart({$product_no})">
+                See Details
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 브랜드 스토리 섹션 -->
+<section class="story_section">
+  <div class="story_inner">
+    <div class="story_content">
+      <h2 class="story_title">Our Story</h2>
+      <p class="story_text">
+        자연에서 영감을 받아 디자인합니다.<br>
+        따뜻한 감성과 현대적인 라이프스타일의 조화,<br>
+        당신의 일상을 더욱 특별하게 만들어갑니다.
+      </p>
+      <a href="/service/company.html" class="story_btn">더 알아보기</a>
+    </div>
+    <div class="story_image">
+      <img src="/images/brand.jpg" alt="Our Story">
+    </div>
+  </div>
+</section>
+
+<!-- 특징 섹션 - Auto Slide Animation -->
+<section class="feature_section">
+  <div class="section_inner">
+    <div class="feature_grid">
+      <!-- 첫 번째 세트 -->
+      <div class="feature_card">
+        <p>엄선된 소재와<br>장인정신으로 만듭니다</p>
+      </div>
+
+      <div class="feature_card">
+        <p>50,000원 이상,<br>전국 어디든 무료로 배송합니다</p>
+      </div>
+
+      <div class="feature_card">
+        <p>30일 이내,<br>언제든 안심하고<br>교환하실 수 있습니다</p>
+      </div>
+
+      <div class="feature_card">
+        <p>친절하고 빠른 응대로,<br>고객님을 먼저 생각합니다</p>
+      </div>
+
+      <!-- 두 번째 세트 (무한 루프용 복제) -->
+      <div class="feature_card">
+        <p>엄선된 소재와<br>장인정신으로 만듭니다</p>
+      </div>
+
+      <div class="feature_card">
+        <p>50,000원 이상,<br>전국 어디든 무료로 배송합니다</p>
+      </div>
+
+      <div class="feature_card">
+        <p>30일 이내,<br>언제든 안심하고<br>교환하실 수 있습니다</p>
+      </div>
+
+      <div class="feature_card">
+        <p>친절하고 빠른 응대로,<br>고객님을 먼저 생각합니다</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 뉴스레터 섹션 -->
+<section class="newsletter_section">
+  <div class="section_inner">
+    <div class="newsletter_content">
+      <h2 class="newsletter_title">Stay Connected</h2>
+      <p class="newsletter_subtitle">새로운 소식과 특별한 혜택을 가장 먼저 받아보세요</p>
+      <form class="newsletter_form">
+        <input type="email" placeholder="이메일 주소" class="newsletter_input">
+        <button type="submit" class="newsletter_btn">구독하기</button>
+      </form>
+    </div>
+  </div>
+</section>
+<!-- 뉴스레터 팝업 -->
+<div class="newsletter-popup-overlay">
+  <div class="newsletter-popup">
+    <button type="button" class="popup-close" aria-label="팝업 닫기">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      </svg>
+    </button>
+
+    <div class="popup-image">
+      <img src="/images/popup.jpg" alt="Natural Living">
+    </div>
+
+    <div class="popup-content">
+      <div class="popup-header">
+        <h2 class="popup-title">Designed for Natural Living</h2>
+        <p class="popup-subtitle">자연에서 영감을 받은 라이프스타일</p>
+        <div class="popup-divider"></div>
+      </div>
+
+      <div class="popup-middle">
+        <p class="popup-desc-en">Nature-inspired beauty for everyday rituals</p>
+        <p class="popup-desc-kr">일상을 특별하게 만드는 자연 그대로의 아름다움</p>
+        <a href="/product/list.html" class="popup-btn">컬렉션 둘러보기</a>
+      </div>
+
+      <div class="popup-footer">
+        <label class="popup-checkbox">
+          <input type="checkbox" id="hideToday">
+          <span>오늘 그만보기</span>
+        </label>
+        <button type="button" class="popup-close-text">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    'use strict';
+
+    // 초기화 플래그 - 중복 실행 방지
+    let isSliderInitialized = false;
+    let isAnimationInitialized = false;
+    let lastWindowWidth = window.innerWidth;
+    let resizeTimer = null;
+
+    // 탭 기능
+    const productTabs = document.querySelectorAll('.product-tab');
+    productTabs.forEach(tab => {
+      tab.addEventListener('click', function () {
+        productTabs.forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.product_section .tab-content').forEach(c => {
+          c.classList.remove('active');
+        });
+        this.classList.add('active');
+        const targetTab = this.getAttribute('data-tab');
+        document.getElementById(targetTab).classList.add('active');
+      });
+    });
+
+    function initMobileSlider() {
+      // 이미 초기화되었으면 스킵
+      if (isSliderInitialized) return;
+
+      if (window.innerWidth <= 768) {
+        document.querySelectorAll('.tab-content').forEach(tab => {
+          const prdList = tab.querySelector('.prdList');
+          if (!prdList) return;
+
+          // 이미 핸들러가 있으면 스킵
+          if (tab._sliderInitialized) return;
+
+          const handler = function(e) {
+            const rect = tab.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const scrollAmount = prdList.offsetWidth;
+
+            if (clickX < 60) {
+              prdList.scrollBy({
+                left: -scrollAmount,
+                behavior: 'smooth'
+              });
+              e.stopPropagation();
+              e.preventDefault();
+            } else if (clickX > rect.width - 60) {
+              prdList.scrollBy({
+                left: scrollAmount,
+                behavior: 'smooth'
+              });
+              e.stopPropagation();
+              e.preventDefault();
+            }
+          };
+
+          tab.addEventListener('click', handler);
+          tab._sliderInitialized = true;
+        });
+
+        isSliderInitialized = true;
+      }
+    }
+
+    // Feature 카드 스크롤 애니메이션 (데스크톱용)
+    function initFeatureAnimation() {
+      if (isAnimationInitialized) return;
+
+      const featureCards = document.querySelectorAll('.feature_card');
+      if (!featureCards.length) return;
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.2,
+        rootMargin: '0px 0px -50px 0px'
+      });
+
+      featureCards.forEach(card => {
+        observer.observe(card);
+      });
+    }
+
+    // Story 섹션 스크롤 애니메이션
+    function initStoryAnimation() {
+      const storyContent = document.querySelector('.story_content');
+      const storyImage = document.querySelector('.story_image');
+
+      if (!storyContent || storyContent._observerAttached) return;
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            storyContent.classList.add('animate');
+            if (storyImage) storyImage.classList.add('animate');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.2,
+        rootMargin: '0px 0px -50px 0px'
+      });
+
+      observer.observe(storyContent);
+      storyContent._observerAttached = true;
+
+      isAnimationInitialized = true;
+    }
+
+    // 뉴스레터 팝업
+    const popupOverlay = document.querySelector('.newsletter-popup-overlay');
+    const popupClose = document.querySelector('.popup-close');
+    const popupCloseText = document.querySelector('.popup-close-text');
+    const hideTodayCheckbox = document.getElementById('hideToday');
+
+    function showPopup() {
+      const hideUntil = localStorage.getItem('hidePopupUntil');
+      const now = new Date().getTime();
+
+      if (!hideUntil || now > parseInt(hideUntil)) {
+        setTimeout(() => {
+          if (popupOverlay) {
+            popupOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+          }
+        }, 1000);
+      }
+    }
+
+    function closePopup() {
+      if (hideTodayCheckbox && hideTodayCheckbox.checked) {
+        const tomorrow = new Date();
+        tomorrow.setHours(24, 0, 0, 0);
+        localStorage.setItem('hidePopupUntil', tomorrow.getTime().toString());
+      }
+
+      if (popupOverlay) {
+        popupOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    if (popupClose) {
+      popupClose.addEventListener('click', closePopup);
+    }
+
+    if (popupCloseText) {
+      popupCloseText.addEventListener('click', closePopup);
+    }
+
+    if (popupOverlay) {
+      popupOverlay.addEventListener('click', function (e) {
+        if (e.target === popupOverlay) {
+          closePopup();
+        }
+      });
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && popupOverlay && popupOverlay.classList.contains('active')) {
+        closePopup();
+      }
+    });
+
+    // 초기 실행
+    initMobileSlider();
+    initFeatureAnimation();
+    initStoryAnimation();
+    showPopup();
+
+    // 리사이즈 시 - 실제 너비 변경시에만 재초기화 (debounce 적용)
+    window.addEventListener('resize', function() {
+      // debounce 처리
+      if (resizeTimer) {
+        clearTimeout(resizeTimer);
+      }
+
+      resizeTimer = setTimeout(function() {
+        const currentWidth = window.innerWidth;
+
+        // 실제 너비가 변경된 경우에만 처리 (모바일 스크롤로 인한 높이 변화 무시)
+        if (Math.abs(currentWidth - lastWindowWidth) > 50) {
+          lastWindowWidth = currentWidth;
+
+          // 모바일에서 데스크톱으로 전환 시 슬라이더 플래그 리셋
+          if (currentWidth > 768) {
+            isSliderInitialized = false;
+          } else {
+            // 데스크톱에서 모바일로 전환 시 슬라이더 초기화
+            isSliderInitialized = false;
+            initMobileSlider();
+          }
+        }
+      }, 250);
+    });
+  })();
+</script>
