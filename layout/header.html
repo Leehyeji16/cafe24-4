@@ -1,0 +1,451 @@
+<!--@css(/css/module/layout/header.css)-->
+
+<!-- 상단 공지 바 -->
+<div class="top-announcement-bar">
+  <div class="announcement-content">
+    <span class="announcement-text">New Collection Available Now.</span>
+    <span class="announcement-text">Made for Everyday Style.</span>
+    <span class="announcement-text">Premium Quality, Timeless Design.</span>
+    <span class="announcement-text">Free Shipping on Orders Over $100.</span>
+    <span class="announcement-text">Discover Your Perfect Style.</span>
+    <span class="announcement-text">Shop the Latest Trends.</span>
+  </div>
+</div>
+
+<!-- 메인페이지일 경우 header_transparent 클래스가 서버사이드에서 추가되어야 함 -->
+<!-- 또는 아래처럼 인라인 스크립트로 즉시 처리 -->
+<header id="header">
+  <div class="header_inner">
+    <!-- 모바일 메뉴 버튼 -->
+    <button type="button" class="util_btn menu_btn display_mobile_only" aria-label="메뉴">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 5H17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        <path d="M3 10H17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        <path d="M3 15H17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+      </svg>
+    </button>
+
+    <!-- 로고 -->
+    <h1 class="logo">
+      <a href="/">
+        <div module="Layout_LogoTop">
+          <span class="logo_main">Mood Studio</span>
+          <span class="logo_tagline">Made for Everyday Style</span>
+        </div>
+      </a>
+    </h1>
+
+    <!-- PC 네비게이션 -->
+    <nav class="gnb display_pc_only">
+      <ul class="gnb_list">
+        <li>
+          <a href="/product/list.html?cate_no=28">NEW</a>
+        </li>
+        <li class="has_submenu">
+          <a href="/product/list.html" class="has_submenu_link">COLLECTION</a>
+          <div class="sub_menu">
+            <ul>
+              <li><a href="/product/list.html?cate_no=24">Dress</a></li>
+              <li><a href="/product/list.html?cate_no=25">Top</a></li>
+              <li><a href="/product/list.html?cate_no=26">bottom</a></li>
+              <li><a href="/product/list.html?cate_no=27">Others</a></li>
+            </ul>
+          </div>
+        </li>
+        <li>
+          <a href="/product/list.html?cate_no=42">BEST</a>
+        </li>
+        <li>
+          <a href="/product/brand-story.html">STORY</a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- 사용자 메뉴 -->
+    <div class="header_util">
+      <!-- 검색 -->
+      <button type="button" class="util_btn search_btn display_pc_only" aria-label="검색">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5" />
+          <path d="M13 13L18 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+      </button>
+
+      <!-- 로그인 -->
+      <a href="/member/login.html" class="util_btn display_pc_only" module="Layout_statelogoff" aria-label="로그인">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="10" cy="6" r="3.5" stroke="currentColor" stroke-width="1.5" />
+          <path d="M4 17C4 13.5 6.5 11 10 11C13.5 11 16 13.5 16 17" stroke="currentColor" stroke-width="1.5"
+            stroke-linecap="round" />
+        </svg>
+      </a>
+
+      <!-- 마이페이지 -->
+      <a href="/myshop/index.html" class="util_btn display_pc_only" module="Layout_stateLogon" aria-label="마이페이지">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="10" cy="6" r="3.5" stroke="currentColor" stroke-width="1.5" />
+          <path d="M4 17C4 13.5 6.5 11 10 11C13.5 11 16 13.5 16 17" stroke="currentColor" stroke-width="1.5"
+            stroke-linecap="round" />
+        </svg>
+      </a>
+
+      <!-- 장바구니 (AJAX로 총 수량 표시) -->
+      <a href="/order/basket.html" class="util_btn cart_btn" aria-label="장바구니">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 3H4.5L6.5 13H16L18 6H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+            stroke-linejoin="round" />
+          <circle cx="7" cy="17" r="1" fill="currentColor" />
+          <circle cx="15" cy="17" r="1" fill="currentColor" />
+        </svg>
+        <span class="cart_count" id="cartTotalCount">0</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- 검색 레이어 -->
+  <div class="search_layer">
+    <div class="search_inner">
+      <div class="search_header">
+        <h2 class="search_title">Search</h2>
+        <button type="button" class="btn_search_close" aria-label="검색창 닫기">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+
+      <form action="/product/search.html" method="get" class="search_form">
+        <div class="search_input_wrapper">
+          <input type="text" name="keyword" placeholder="검색어를 입력하세요" class="search_input" autocomplete="off">
+          <button type="submit" class="btn_search_submit" aria-label="검색">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" />
+              <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 모바일 메뉴 -->
+  <div class="mobile_menu display_mobile_only">
+    <div class="mobile_menu_inner">
+      <!-- X 닫기 버튼 -->
+      <button type="button" class="mobile_menu_close display_mobile_only" aria-label="메뉴 닫기">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+      </button>
+
+      <!-- 메인 메뉴 -->
+      <nav class="nav_links">
+        <a href="/product/list.html?cate_no=28">NEW</a>
+        <a href="/product/list.html" class="has_submenu_link" data-submenu="collection">
+          <span>COLLECTION</span>
+          <span class="submenu_arrow">›</span>
+        </a>
+        <a href="/product/list.html?cate_no=42">BEST</a>
+        <a href="/product/brand-story.html">STORY</a>
+      </nav>
+
+      <!-- 하단 아이콘 -->
+      <div class="menu_bottom_icons display_mobile_only">
+        <button type="button" class="menu_icon_item search_btn_mobile">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.5" />
+            <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+          <span>검색</span>
+        </button>
+        <a href="/myshop/index.html" class="menu_icon_item">
+          <svg width="22" height="22" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="10" cy="6" r="3.5" stroke="currentColor" stroke-width="1.5" />
+            <path d="M4 17C4 13.5 6.5 11 10 11C13.5 11 16 13.5 16 17" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" />
+          </svg>
+          <span>마이페이지</span>
+        </a>
+      </div>
+
+      <!-- 브랜드 영역 -->
+      <div class="menu_brand display_mobile_only" module="Layout_LogoTop">
+        <div class="brand_logo">Mood Studio</div>
+        <p class="brand_text">Made for Everyday Style</p>
+      </div>
+    </div>
+
+    <!-- 모바일 서브메뉴 - COLLECTION -->
+    <div class="mobile_submenu" data-submenu-id="collection">
+      <button type="button" class="btn_submenu_close" aria-label="메뉴 닫기">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+      </button>
+
+      <div class="submenu_header">
+        <button type="button" class="submenu_back">
+          <span class="back_arrow">‹</span>
+        </button>
+        <a href="/product/list.html" class="submenu_title">COLLECTION</a>
+      </div>
+
+      <a href="/product/list.html?cate_no=24">Dress</a>
+      <a href="/product/list.html?cate_no=25">Top</a>
+      <a href="/product/list.html?cate_no=26">bottom</a>
+      <a href="/product/list.html?cate_no=27">Others</a>
+
+      <div class="submenu_brand" module="Layout_LogoTop">
+        <div class="brand_logo">{$mall_name}</div>
+        <p class="brand_text">Made for Everyday Style</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="mobile_menu_overlay"></div>
+
+</header>
+
+<!-- 메인페이지 감지 및 투명 헤더 즉시 적용 (FOUC 방지) -->
+<script>
+  (function() {
+    var path = window.location.pathname;
+    var isMainPage = path === '/' || path === '/index.html';
+    if (isMainPage) {
+      document.getElementById('header').classList.add('header_transparent');
+    }
+  })();
+</script>
+
+<script>
+  (function () {
+    'use strict';
+
+    window.addEventListener('DOMContentLoaded', function () {
+      const header = document.getElementById('header');
+      const announcementBar = document.querySelector('.top-announcement-bar');
+
+      if (!header) return;
+
+      // 메인페이지 체크 (이미 위에서 클래스가 추가됨)
+      const isMainPage = window.location.pathname === '/' || window.location.pathname === '/index.html';
+
+      // 장바구니 총 수량 업데이트 함수
+      function updateCartTotalCount() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/order/basket.html', true);
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            var parser = new DOMParser();
+            var doc = parser.parseFromString(xhr.responseText, 'text/html');
+
+            var qtyInputs = doc.querySelectorAll('input[name^="quantity"]');
+            var totalQty = 0;
+
+            qtyInputs.forEach(function (input) {
+              var val = parseInt(input.value) || 0;
+              if (val > 0) totalQty += val;
+            });
+
+            if (totalQty === 0) {
+              var totalText = doc.querySelector('.xans-order-basketpackage, .totalCount, .total_count');
+              if (totalText) {
+                var match = totalText.textContent.match(/(\d+)/);
+                if (match) totalQty = parseInt(match[1]) || 0;
+              }
+            }
+
+            var cartCountEl = document.getElementById('cartTotalCount');
+            if (cartCountEl) {
+              cartCountEl.textContent = totalQty;
+            }
+          }
+        };
+        xhr.send();
+      }
+
+      updateCartTotalCount();
+      window.updateCartTotalCount = updateCartTotalCount;
+
+      // 스크롤 헤더 및 공지바 숨김
+      function handleScroll() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+        // 메인페이지만 투명 효과 적용
+        if (isMainPage) {
+          if (scrollTop > 10) {
+            header.classList.add('scrolled');
+          } else {
+            header.classList.remove('scrolled');
+          }
+        }
+
+        // 공지바는 모든 페이지에서 작동
+        if (announcementBar) {
+          if (scrollTop > 50) {
+            announcementBar.classList.add('hidden');
+            header.classList.add('no-announcement');
+          } else {
+            announcementBar.classList.remove('hidden');
+            header.classList.remove('no-announcement');
+          }
+        }
+      }
+
+      handleScroll();
+      window.addEventListener('scroll', handleScroll, { passive: true });
+
+      // 모바일 메뉴
+      const btnMobileMenu = document.querySelector('.menu_btn');
+      const btnMenuClose = document.querySelector('.mobile_menu_close');
+      const mobileMenu = document.querySelector('.mobile_menu');
+      const mobileMenuOverlay = document.querySelector('.mobile_menu_overlay');
+      const allMobileSubmenus = document.querySelectorAll('.mobile_submenu');
+      const navLinks = document.querySelector('.nav_links');
+      const menuBottomIcons = document.querySelector('.menu_bottom_icons');
+      const menuBrand = document.querySelector('.menu_brand');
+
+      if (mobileMenu) {
+        mobileMenu.style.position = 'fixed';
+        mobileMenu.style.top = '0';
+        mobileMenu.style.left = '-100%';
+        mobileMenu.style.right = 'auto';
+        mobileMenu.style.width = '320px';
+        mobileMenu.style.height = '100%';
+        mobileMenu.style.zIndex = '1002';
+        mobileMenu.style.transition = 'left 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+      }
+
+      if (btnMobileMenu && mobileMenu) {
+        btnMobileMenu.addEventListener('click', () => {
+          mobileMenu.style.left = '0';
+          mobileMenu.classList.add('active');
+          if (mobileMenuOverlay) mobileMenuOverlay.classList.add('active');
+          document.body.classList.add('menu_open');
+        });
+      }
+
+      if (btnMenuClose && mobileMenu) {
+        btnMenuClose.addEventListener('click', () => {
+          mobileMenu.style.left = '-100%';
+          mobileMenu.classList.remove('active');
+          if (mobileMenuOverlay) mobileMenuOverlay.classList.remove('active');
+          document.body.classList.remove('menu_open');
+        });
+      }
+
+      document.addEventListener('click', function (e) {
+        if (document.body.classList.contains('menu_open')) {
+          if (mobileMenu && !mobileMenu.contains(e.target) && !btnMobileMenu.contains(e.target)) {
+            mobileMenu.style.left = '-100%';
+            mobileMenu.classList.remove('active');
+            if (mobileMenuOverlay) mobileMenuOverlay.classList.remove('active');
+            document.body.classList.remove('menu_open');
+            allMobileSubmenus.forEach(submenu => submenu.classList.remove('active'));
+            if (navLinks) navLinks.classList.remove('hidden');
+            if (menuBottomIcons) menuBottomIcons.classList.remove('hidden');
+            if (menuBrand) menuBrand.classList.remove('hidden');
+          }
+        }
+      });
+
+      const hasSubmenuLinks = document.querySelectorAll('.has_submenu_link');
+      hasSubmenuLinks.forEach(link => {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+
+          const submenuId = this.getAttribute('data-submenu');
+          const targetSubmenu = document.querySelector(`.mobile_submenu[data-submenu-id="${submenuId}"]`);
+
+          if (targetSubmenu) {
+            if (navLinks) navLinks.classList.add('hidden');
+            if (menuBottomIcons) menuBottomIcons.classList.add('hidden');
+            if (menuBrand) menuBrand.classList.add('hidden');
+            targetSubmenu.classList.add('active');
+          }
+        });
+      });
+
+      const submenuBacks = document.querySelectorAll('.submenu_back');
+      submenuBacks.forEach(backBtn => {
+        backBtn.addEventListener('click', function () {
+          if (navLinks) navLinks.classList.remove('hidden');
+          if (menuBottomIcons) menuBottomIcons.classList.remove('hidden');
+          if (menuBrand) menuBrand.classList.remove('hidden');
+          allMobileSubmenus.forEach(submenu => submenu.classList.remove('active'));
+        });
+      });
+
+      const btnSubmenuCloses = document.querySelectorAll('.btn_submenu_close');
+      btnSubmenuCloses.forEach(closeBtn => {
+        closeBtn.addEventListener('click', function () {
+          mobileMenu.style.left = '-100%';
+          mobileMenu.classList.remove('active');
+          if (mobileMenuOverlay) mobileMenuOverlay.classList.remove('active');
+          document.body.classList.remove('menu_open');
+          allMobileSubmenus.forEach(submenu => submenu.classList.remove('active'));
+          if (navLinks) navLinks.classList.remove('hidden');
+          if (menuBottomIcons) menuBottomIcons.classList.remove('hidden');
+          if (menuBrand) menuBrand.classList.remove('hidden');
+        });
+      });
+
+      // 검색 레이어
+      const searchBtn = document.querySelector('.search_btn');
+      const searchBtnMobile = document.querySelector('.search_btn_mobile');
+      const searchLayer = document.querySelector('.search_layer');
+      const searchClose = document.querySelector('.btn_search_close');
+      const searchInput = document.querySelector('.search_input');
+
+      function openSearch() {
+        if (searchLayer) {
+          searchLayer.classList.add('active');
+          document.body.classList.add('search_open');
+          setTimeout(() => {
+            if (searchInput) searchInput.focus();
+          }, 100);
+        }
+      }
+
+      function closeSearch() {
+        if (searchLayer) {
+          searchLayer.classList.remove('active');
+          document.body.classList.remove('search_open');
+        }
+      }
+
+      if (searchBtn) {
+        searchBtn.addEventListener('click', openSearch);
+      }
+
+      if (searchBtnMobile) {
+        searchBtnMobile.addEventListener('click', function () {
+          mobileMenu.style.left = '-100%';
+          mobileMenu.classList.remove('active');
+          if (mobileMenuOverlay) mobileMenuOverlay.classList.remove('active');
+          document.body.classList.remove('menu_open');
+          openSearch();
+        });
+      }
+
+      if (searchClose) {
+        searchClose.addEventListener('click', closeSearch);
+      }
+
+      if (searchLayer) {
+        searchLayer.addEventListener('click', function (e) {
+          if (e.target === searchLayer) {
+            closeSearch();
+          }
+        });
+      }
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && searchLayer && searchLayer.classList.contains('active')) {
+          closeSearch();
+        }
+      });
+    });
+  })();
+</script>
