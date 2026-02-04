@@ -12,9 +12,7 @@
   </div>
 </div>
 
-<!-- 메인페이지일 경우 header_transparent 클래스가 서버사이드에서 추가되어야 함 -->
-<!-- 또는 아래처럼 인라인 스크립트로 즉시 처리 -->
-<header id="header">
+<header id="header" class="header_transparent">
   <div class="header_inner">
     <!-- 모바일 메뉴 버튼 -->
     <button type="button" class="util_btn menu_btn display_mobile_only" aria-label="메뉴">
@@ -206,13 +204,13 @@
 
 </header>
 
-<!-- 메인페이지 감지 및 투명 헤더 즉시 적용 (FOUC 방지) -->
+<!-- 서브페이지에서는 투명 헤더 클래스 제거 (메인페이지는 기본 투명) -->
 <script>
   (function() {
     var path = window.location.pathname;
     var isMainPage = path === '/' || path === '/index.html';
-    if (isMainPage) {
-      document.getElementById('header').classList.add('header_transparent');
+    if (!isMainPage) {
+      document.getElementById('header').classList.remove('header_transparent');
     }
   })();
 </script>
