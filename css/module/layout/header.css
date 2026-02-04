@@ -55,18 +55,24 @@
     background-color: var(--bg-white);
     border-bottom: 1px solid var(--gray-lighter);
     z-index: 1000;
-    transition: top 0.4s ease, all 0.4s ease;
+    transition: top 0.4s ease, box-shadow 0.4s ease;
 }
 
 #header.no-announcement {
     top: 0;
 }
 
-/* Transparent Header */
+/* Transparent Header - 초기 상태에서 즉시 투명 적용 */
 #header.header_transparent {
     position: absolute;
-    background-color: transparent;
-    border-bottom: none;
+    background-color: transparent !important;
+    border-bottom: none !important;
+    transition: none;
+}
+
+/* 스크롤 후에만 transition 적용 */
+#header.header_transparent.scrolled {
+    transition: background-color 0.4s ease, border-bottom 0.4s ease, box-shadow 0.4s ease;
 }
 
 #header.header_transparent .logo_main,
